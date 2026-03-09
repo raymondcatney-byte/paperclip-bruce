@@ -8,19 +8,9 @@ services:
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
-      echo "=== Building all workspace packages ==="
-      pnpm -r build 2>&1 || echo "Build completed with some errors"
-      echo "=== Verifying build output ==="
-      ls -la packages/db/dist/ 2>/dev/null || echo "db/dist not found"
-      ls -la server/dist/ 2>/dev/null || echo "server/dist not found"
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      export HOST="0.0.0.0"
-      export PORT="10000"
-      export NODE_ENV="production"
-      export PAPERCLIP_MIGRATION_PROMPT="never"
-      echo "Starting with HOST=$HOST PORT=$PORT"
-      cd packages/db && npx drizzle-kit migrate && cd ../../server && node dist/index.js 2>&1
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production npx tsx src/index.ts
     envVars:
       - key: NODE_ENV
         value: production
