@@ -1,6 +1,8 @@
+# Paperclip - Separate UI and API Services
 services:
+  # API Service (Node.js)
   - type: web
-    name: paperclip-bruce
+    name: paperclip-api
     runtime: node
     plan: free
     buildCommand: |
@@ -15,11 +17,27 @@ services:
         value: 10000
       - key: HOST
         value: 0.0.0.0
+      - key: PAPERCLIP_DEPLOYMENT_MODE
+        value: local_trusted
       - key: DATABASE_URL
         fromDatabase:
           name: paperclip-db
           property: connectionString
     healthCheckPath: /api/health
+
+  # UI Service (Static Site)
+  - type: web
+    name: paperclip-ui
+    runtime: static
+    plan: free
+    buildCommand: |
+      npm install -g pnpm
+      NODE_ENV=development pnpm install
+      cd ui && pnpm install && pnpm run build
+    staticPublishPath: ./ui/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://paperclip-api.onrender.com
 
 databases:
   - name: paperclip-db
