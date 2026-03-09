@@ -11,7 +11,7 @@ services:
       pnpm --filter @paperclipai/db exec tsc || true
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      cd server && npx tsx src/index.ts
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && npx tsx src/index.ts
     envVars:
       - key: NODE_ENV
         value: production
