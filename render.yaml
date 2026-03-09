@@ -10,7 +10,7 @@ services:
       NODE_ENV=development pnpm install
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production npx tsx src/index.ts
+      chmod +x start-render.sh && ./start-render.sh
     envVars:
       - key: NODE_ENV
         value: production
