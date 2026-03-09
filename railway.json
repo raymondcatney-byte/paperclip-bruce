@@ -1,0 +1,14 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install -g pnpm && pnpm install && cd packages/db && npx drizzle-kit generate"
+  },
+  "deploy": {
+    "startCommand": "cd packages/db && npx drizzle-kit migrate && cd ../../server && pnpm exec tsx src/index.ts",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}
