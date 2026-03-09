@@ -11,7 +11,7 @@ services:
       pnpm --filter @paperclipai/db exec tsc || true
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production npx tsx src/index.ts
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production npx tsx src/index.ts 2>&1
     envVars:
       - key: NODE_ENV
         value: production
@@ -21,16 +21,12 @@ services:
         value: 10000
       - key: PAPERCLIP_MIGRATION_PROMPT
         value: never
-      - key: PAPERCLIP_DEPLOYMENT_MODE
-        value: authenticated
-      - key: PAPERCLIP_DEPLOYMENT_EXPOSURE
-        value: public
-      - key: PAPERCLIP_PUBLIC_URL
-        value: https://paperclip-bruce.onrender.com
       - key: DATABASE_URL
         fromDatabase:
           name: paperclip-db
           property: connectionString
+      - key: DEPLOYMENT_MODE
+        value: local_trusted
     healthCheckPath: /api/health
 
 databases:
