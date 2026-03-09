@@ -33,4 +33,3 @@ databases:
     user: paperclip
     plan: free
     region: ohio
-    postgresMajorVersion: 15
