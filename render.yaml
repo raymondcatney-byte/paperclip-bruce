@@ -11,7 +11,7 @@ services:
       pnpm --filter @paperclipai/db exec tsc || true
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      mkdir -p /opt/render/.paperclip/instances/default && echo '{"$meta":{"version":1,"updatedAt":"2026-03-09T00:00:00Z","source":"onboard"},"database":{"mode":"postgres"},"server":{"deploymentMode":"local_trusted","exposure":"private","host":"0.0.0.0","port":10000},"logging":{"mode":"file"}}' > /opt/render/.paperclip/instances/default/config.json && cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 npx tsx src/index.ts
+      chmod +x start.sh && ./start.sh
     envVars:
       - key: NODE_ENV
         value: production
