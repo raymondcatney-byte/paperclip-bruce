@@ -40,9 +40,12 @@ cd packages/db
 npx drizzle-kit migrate
 cd ../..
 
-# Start server with explicit env vars
+# Start server with explicit env vars and capture output
 echo "=== Starting server ==="
 export HOST=0.0.0.0
 export PORT=10000
+export NODE_ENV=production
 cd server
-exec npx tsx src/index.ts
+
+# Run with unbuffered output and capture errors
+exec npx tsx src/index.ts 2>&1
