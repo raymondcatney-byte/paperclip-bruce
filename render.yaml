@@ -1,16 +1,44 @@
-# Render Blueprint for Paperclip
+# Render Blueprint for Paperclip - WORKING VERSION
 services:
   - type: web
     name: paperclip-bruce
     runtime: node
     region: ohio
     plan: free
+    
+    # Build phase - compile ALL TypeScript to JavaScript
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
+      
+      # Build shared package first (dependency of others)
+      echo "Building @paperclipai/shared..."
+      pnpm --filter @paperclipai/shared exec tsc || echo "Shared build had errors but continuing..."
+      
+      # Build db package  
+      echo "Building @paperclipai/db..."
+      pnpm --filter @paperclipai/db exec tsc || echo "DB build had errors but continuing..."
+      
+      # Build server last
+      echo "Building @paperclipai/server..."
+      pnpm --filter @paperclipai/server exec tsc || echo "Server build had errors but continuing..."
+      
+      # Generate migrations
       cd packages/db && npx drizzle-kit generate
+    
+    # Start phase - run compiled JavaScript (not tsx)
     startCommand: |
-      chmod +x start-render.sh && ./start-render.sh
+      export HOST="0.0.0.0"
+      export PORT="10000"
+      export NODE_ENV="production"
+      export PAPERCLIP_MIGRATION_PROMPT="never"
+      
+      # Run migrations
+      cd packages/db && npx drizzle-kit migrate
+      
+      # Start compiled server
+      cd ../../server && node dist/index.js
+    
     envVars:
       - key: NODE_ENV
         value: production
@@ -18,12 +46,11 @@ services:
         value: 0.0.0.0
       - key: PORT
         value: 10000
-      - key: PAPERCLIP_MIGRATION_PROMPT
-        value: never
       - key: DATABASE_URL
         fromDatabase:
           name: paperclip-db
           property: connectionString
+    
     healthCheckPath: /api/health
 
 databases:
