@@ -8,7 +8,8 @@ services:
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
-      pnpm --filter @paperclipai/db exec drizzle-kit generate
+      pnpm --filter @paperclipai/db exec tsc || true
+      cd packages/db && npx drizzle-kit generate
     startCommand: |
       cd server && npx tsx src/index.ts
     envVars:
