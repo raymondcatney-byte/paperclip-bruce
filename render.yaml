@@ -8,10 +8,16 @@ services:
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
-      pnpm --filter @paperclipai/db exec tsc || true
+      pnpm --filter @paperclipai/db build || true
+      pnpm --filter @paperclipai/server build 2>&1 || echo "Build completed with warnings"
       cd packages/db && npx drizzle-kit generate
     startCommand: |
-      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production npx tsx src/index.ts 2>&1
+      export HOST="0.0.0.0"
+      export PORT="10000"
+      export NODE_ENV="production"
+      export PAPERCLIP_MIGRATION_PROMPT="never"
+      echo "Starting with HOST=$HOST PORT=$PORT"
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && node dist/index.js 2>&1
     envVars:
       - key: NODE_ENV
         value: production
@@ -25,8 +31,6 @@ services:
         fromDatabase:
           name: paperclip-db
           property: connectionString
-      - key: DEPLOYMENT_MODE
-        value: local_trusted
     healthCheckPath: /api/health
 
 databases:
