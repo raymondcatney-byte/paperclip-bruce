@@ -1,0 +1,27 @@
+# Render Blueprint for Paperclip
+services:
+  - type: web
+    name: paperclip-bruce
+    runtime: node
+    region: ohio
+    plan: free
+    buildCommand: |
+      npm install -g pnpm
+      pnpm install
+      pnpm --filter @paperclipai/server build
+    startCommand: pnpm --filter @paperclipai/server start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PAPERCLIP_MIGRATION_PROMPT
+        value: never
+      - key: PORT
+        value: 10000
+    healthCheckPath: /api/health
+
+databases:
+  - name: paperclip-db
+    databaseName: paperclip
+    user: paperclip
+    plan: free
+    region: ohio

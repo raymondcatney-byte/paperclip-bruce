@@ -1,0 +1,152 @@
+{
+  "name": "The Architect's Dispatch",
+  "description": "Strategic intelligence system for navigating transitions between paradigms",
+  "goals": [
+    {
+      "id": "g1",
+      "title": "Launch Substack Publication",
+      "description": "Deploy The Architect's Dispatch with paid tier ($150/month)",
+      "targetDate": "2026-03-15",
+      "priority": "high"
+    },
+    {
+      "id": "g2", 
+      "title": "Build Intelligence Architecture",
+      "description": "8-agent autonomous system with Alfred, Machiavelli, Pattern Detector, Synthesis Engine, Autonomous Controller, Self-Improvement Engine, Archivist, Orchestrator",
+      "targetDate": "2026-03-08",
+      "priority": "high",
+      "status": "in-progress"
+    },
+    {
+      "id": "g3",
+      "title": "Acquire 100 Free Subscribers",
+      "description": "Week 1 target for Substack launch",
+      "targetDate": "2026-03-15",
+      "priority": "medium"
+    }
+  ],
+  "agents": [
+    {
+      "id": "alfred",
+      "name": "Alfred",
+      "title": "Chief of Staff / Daily Briefing",
+      "description": "Daily intelligence briefings on 7 domains: biotech, geopolitics, AI, resources, monetary, energy, realignment",
+      "adapter": "openclaw-gateway",
+      "schedule": "0 7 * * *",
+      "skills": ["daily-briefing", "intelligence-gathering"],
+      "budget": {
+        "monthlyLimit": 50,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "machiavelli",
+      "name": "Machiavelli Geostrategist",
+      "title": "Senior Strategic Analyst",
+      "description": "Deep geopolitical analysis using Six Pillars framework: Resource Determinism, Peripheral Strangulation, Asymmetric Pressure, Cascade Dynamics, Fortress Logic, Two-Level Game",
+      "adapter": "openclaw-gateway",
+      "skills": ["geopolitical-analysis", "strategic-forecasting", "scenario-planning"],
+      "budget": {
+        "monthlyLimit": 100,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "pattern-detector",
+      "name": "Pattern Detector",
+      "title": "Intelligence Analyst - Trends",
+      "description": "Identifies trends, anomalies, and emerging signals across intelligence archives. Runs every 6 hours.",
+      "adapter": "openclaw-gateway",
+      "schedule": "0 */6 * * *",
+      "skills": ["pattern-recognition", "anomaly-detection", "correlation-analysis"],
+      "budget": {
+        "monthlyLimit": 30,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "synthesis-engine",
+      "name": "Synthesis Engine",
+      "title": "Integration Processor",
+      "description": "Combines outputs from multiple agents into unified intelligence products: cross-domain synthesis, temporal synthesis, agent fusion, scenario building",
+      "adapter": "openclaw-gateway",
+      "skills": ["cross-domain-analysis", "scenario-generation", "strategic-synthesis"],
+      "budget": {
+        "monthlyLimit": 50,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "autonomous-controller",
+      "name": "Autonomous Controller",
+      "title": "Self-Directing System",
+      "description": "Operates without user triggers, anticipates needs, self-corrects. Runs every 2 hours to predict and queue proactive briefings.",
+      "adapter": "openclaw-gateway",
+      "schedule": "0 */2 * * *",
+      "skills": ["predictive-analysis", "priority-management", "context-awareness"],
+      "budget": {
+        "monthlyLimit": 40,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "self-improvement",
+      "name": "Self-Improvement Engine",
+      "title": "Meta-Learning System",
+      "description": "Refines agent prompts, optimizes workflows, eliminates inefficiencies. Daily at 3 AM.",
+      "adapter": "openclaw-gateway",
+      "schedule": "0 3 * * *",
+      "skills": ["prompt-optimization", "workflow-optimization", "kbase-updates"],
+      "budget": {
+        "monthlyLimit": 30,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "archivist",
+      "name": "Archivist",
+      "title": "Knowledge Keeper",
+      "description": "Store, retrieve, and synthesize intelligence history. Daily archival sweep at 9 PM.",
+      "adapter": "openclaw-gateway",
+      "schedule": "0 21 * * *",
+      "skills": ["memory-management", "retrieval", "historical-synthesis"],
+      "budget": {
+        "monthlyLimit": 20,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "orchestrator",
+      "name": "Intelligence Orchestrator",
+      "title": "System Coordinator",
+      "description": "Routes intelligence tasks to appropriate sub-agents. Central command layer.",
+      "adapter": "openclaw-gateway",
+      "skills": ["task-routing", "coordination", "workflow-management"],
+      "budget": {
+        "monthlyLimit": 20,
+        "currency": "USD"
+      }
+    }
+  ],
+  "orgChart": {
+    "ceo": "orchestrator",
+    "departments": [
+      {
+        "name": "Intelligence Operations",
+        "head": "alfred",
+        "members": ["machiavelli", "pattern-detector", "synthesis-engine"]
+      },
+      {
+        "name": "Autonomous Systems",
+        "head": "autonomous-controller",
+        "members": ["self-improvement"]
+      },
+      {
+        "name": "Knowledge Management",
+        "head": "archivist",
+        "members": []
+      }
+    ]
+  },
+  "totalMonthlyBudget": 340
+}
