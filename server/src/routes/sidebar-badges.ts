@@ -19,13 +19,13 @@ export function sidebarBadgeRoutes(db: Db) {
     const companyId = req.params.companyId as string;
     assertCompanyAccess(req, companyId);
     let canApproveJoins = false;
-    if (req.actor.type === "board") {
+    if ((req as any).actor.type === "board") {
       canApproveJoins =
-        req.actor.source === "local_implicit" ||
-        Boolean(req.actor.isInstanceAdmin) ||
-        (await access.canUser(companyId, req.actor.userId, "joins:approve"));
-    } else if (req.actor.type === "agent" && req.actor.agentId) {
-      canApproveJoins = await access.hasPermission(companyId, "agent", req.actor.agentId, "joins:approve");
+        (req as any).actor.source === "local_implicit" ||
+        Boolean((req as any).actor.isInstanceAdmin) ||
+        (await access.canUser(companyId, (req as any).actor.userId, "joins:approve"));
+    } else if ((req as any).actor.type === "agent" && (req as any).actor.agentId) {
+      canApproveJoins = await access.hasPermission(companyId, "agent", (req as any).actor.agentId, "joins:approve");
     }
 
     const joinRequestCount = canApproveJoins
