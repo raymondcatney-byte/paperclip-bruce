@@ -8,8 +8,10 @@ services:
     buildCommand: |
       npm install -g pnpm
       pnpm install
+      pnpm --filter @paperclipai/db generate
       pnpm --filter @paperclipai/server build
-    startCommand: pnpm --filter @paperclipai/server start
+    startCommand: |
+      pnpm --filter @paperclipai/server start
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,6 +19,12 @@ services:
         value: never
       - key: PORT
         value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paperclip-db
+          property: connectionString
+      - key: DEPLOYMENT_MODE
+        value: local_trusted
     healthCheckPath: /api/health
 
 databases:
@@ -25,3 +33,4 @@ databases:
     user: paperclip
     plan: free
     region: ohio
+    postgresMajorVersion: 15
