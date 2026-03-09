@@ -1,17 +1,17 @@
 #!/bin/bash
-set -e
 
 echo "=== Starting Paperclip on Render ==="
 echo "HOST=$HOST"
 echo "PORT=$PORT"
+echo "DATABASE_URL exists: $([ -n "$DATABASE_URL" ] && echo YES || echo NO)"
 
 # Create config directory
 mkdir -p /opt/render/.paperclip/instances/default
 
 # Create config.json with proper host
-cat > /opt/render/.paperclip/instances/default/config.json << 'EOF'
+cat > /opt/render/.paperclip/instances/default/config.json << EOF
 {
-  "$meta": {
+  "\$meta": {
     "version": 1,
     "updatedAt": "2026-03-09T00:00:00Z",
     "source": "onboard"
@@ -32,20 +32,24 @@ cat > /opt/render/.paperclip/instances/default/config.json << 'EOF'
 EOF
 
 echo "=== Config created ==="
-cat /opt/render/.paperclip/instances/default/config.json
 
 # Run migrations
 echo "=== Running database migrations ==="
-cd packages/db
-npx drizzle-kit migrate
+cd packages/db && npx drizzle-kit migrate
 cd ../..
 
-# Start server with explicit env vars and capture output
+# Start server with explicit env vars
 echo "=== Starting server ==="
 export HOST=0.0.0.0
 export PORT=10000
 export NODE_ENV=production
+export PAPERCLIP_MIGRATION_PROMPT=never
+
 cd server
 
-# Run with unbuffered output and capture errors
-exec npx tsx src/index.ts 2>&1
+# Run server with full error output
+echo "Running: npx tsx src/index.ts"
+npx tsx src/index.ts || {
+  echo "=== Server exited with code $? ==="
+  exit 1
+}
