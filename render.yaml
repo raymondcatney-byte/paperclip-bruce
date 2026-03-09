@@ -8,8 +8,11 @@ services:
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
-      pnpm --filter @paperclipai/db build || true
-      pnpm --filter @paperclipai/server build 2>&1 || echo "Build completed with warnings"
+      echo "=== Building all workspace packages ==="
+      pnpm -r build 2>&1 || echo "Build completed with some errors"
+      echo "=== Verifying build output ==="
+      ls -la packages/db/dist/ 2>/dev/null || echo "db/dist not found"
+      ls -la server/dist/ 2>/dev/null || echo "server/dist not found"
       cd packages/db && npx drizzle-kit generate
     startCommand: |
       export HOST="0.0.0.0"
