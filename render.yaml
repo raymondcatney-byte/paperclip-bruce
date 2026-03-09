@@ -5,25 +5,20 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm
-      pnpm install
-      pnpm build
-      cd ui && pnpm install && pnpm build
-    startCommand: cd server && pnpm exec tsx src/index.ts
+      NODE_ENV=development pnpm install
+    startCommand: |
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
-      - key: PAPERCLIP_DEPLOYMENT_MODE
-        value: authenticated
-      - key: PAPERCLIP_DEPLOYMENT_EXPOSURE
-        value: public
-      - key: PAPERCLIP_SERVE_UI
-        value: "true"
-      - key: PAPERCLIP_PUBLIC_URL
-        value: https://paperclip-bruce.onrender.com
-      - key: BETTER_AUTH_SECRET
-        generateValue: true
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paperclip-db
+          property: connectionString
     healthCheckPath: /api/health
 
 databases:
