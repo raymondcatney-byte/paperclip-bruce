@@ -1,4 +1,4 @@
-# Render Blueprint for Paperclip
+# Render Blueprint for Paperclip with UI
 services:
   - type: web
     name: paperclip-bruce
@@ -8,9 +8,22 @@ services:
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
+      
+      # Generate database migrations
       cd packages/db && npx drizzle-kit generate
+      
+      # Build UI for static serving
+      echo "Building UI..."
+      cd ../../ui && pnpm install && pnpm run build
+      
+      # Copy UI dist to server location
+      echo "Copying UI to server..."
+      mkdir -p ../server/ui-dist
+      cp -r dist/* ../server/ui-dist/ || echo "UI build may have failed, continuing..."
+      
+      echo "Build complete"
     startCommand: |
-      cd server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
+      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production SERVE_UI=true pnpm exec tsx src/index.ts
     envVars:
       - key: PORT
         value: 10000
@@ -24,7 +37,7 @@ services:
         value: public
       - key: PAPERCLIP_PUBLIC_URL
         value: https://paperclip-bruce.onrender.com
-      - key: PAPERCLIP_SERVE_UI
+      - key: SERVE_UI
         value: "true"
       - key: BETTER_AUTH_SECRET
         value: paperclip-auth-secret-key-32-chars-long-render
