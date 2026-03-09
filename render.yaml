@@ -9,9 +9,8 @@ services:
       npm install -g pnpm
       pnpm install
       pnpm --filter @paperclipai/db generate
-      pnpm --filter @paperclipai/server build
     startCommand: |
-      pnpm --filter @paperclipai/server start
+      cd server && npx tsx src/index.ts
     envVars:
       - key: NODE_ENV
         value: production
