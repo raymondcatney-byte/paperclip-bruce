@@ -1,4 +1,4 @@
-# Paperclip Cloud Deployment - Auto-seeded with admin user
+# Paperclip Cloud Deployment
 services:
   - type: web
     name: paperclip-bruce
@@ -9,11 +9,8 @@ services:
       npm install -g pnpm
       NODE_ENV=development pnpm install
     startCommand: |
-      echo "=== Running migrations ===" && 
       cd packages/db && npx drizzle-kit migrate && 
-      echo "=== Seeding admin user ===" && 
-      psql "$DATABASE_URL" -f ../../seed-admin.sql && 
-      echo "=== Starting server ===" && 
+      echo "Note: Use auth bootstrap-ceo command to create first admin" && 
       cd ../../server && 
       HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
     envVars:
