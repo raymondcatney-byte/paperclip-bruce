@@ -1,44 +1,47 @@
-# Paperclip - Separate UI and API Services
+# Paperclip Cloud Deployment - Auto-seeded with admin user
 services:
-  # API Service (Node.js)
   - type: web
-    name: paperclip-api
+    name: paperclip-bruce
     runtime: node
+    region: ohio
     plan: free
     buildCommand: |
       npm install -g pnpm
       NODE_ENV=development pnpm install
     startCommand: |
-      cd packages/db && npx drizzle-kit migrate && cd ../../server && HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
+      echo "=== Running migrations ===" && 
+      cd packages/db && npx drizzle-kit migrate && 
+      echo "=== Seeding admin user ===" && 
+      psql "$DATABASE_URL" -f ../../seed-admin.sql && 
+      echo "=== Starting server ===" && 
+      cd ../../server && 
+      HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: HOST
         value: 0.0.0.0
+      - key: PORT
+        value: 10000
       - key: PAPERCLIP_DEPLOYMENT_MODE
-        value: local_trusted
+        value: authenticated
+      - key: PAPERCLIP_DEPLOYMENT_EXPOSURE
+        value: public
+      - key: PAPERCLIP_PUBLIC_URL
+        value: https://paperclip-bruce.onrender.com
+      - key: BETTER_AUTH_SECRET
+        generateValue: true
+      - key: PAPERCLIP_MIGRATION_PROMPT
+        value: never
       - key: DATABASE_URL
         fromDatabase:
           name: paperclip-db
           property: connectionString
     healthCheckPath: /api/health
 
-  # UI Service (Static Site)
-  - type: web
-    name: paperclip-ui
-    runtime: static
-    plan: free
-    buildCommand: |
-      npm install -g pnpm
-      NODE_ENV=development pnpm install
-      cd ui && pnpm install && pnpm run build
-    staticPublishPath: ./ui/dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://paperclip-api.onrender.com
-
 databases:
   - name: paperclip-db
+    databaseName: paperclip
+    user: paperclip
     plan: free
+    region: ohio
