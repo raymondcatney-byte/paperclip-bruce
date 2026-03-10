@@ -1,4 +1,4 @@
-# Paperclip Cloud Deployment
+# Paperclip Cloud Deployment - Local Trusted Mode (No Auth Required)
 services:
   - type: web
     name: paperclip-bruce
@@ -10,7 +10,7 @@ services:
       NODE_ENV=development pnpm install
     startCommand: |
       cd packages/db && npx drizzle-kit migrate && 
-      echo "Note: Use auth bootstrap-ceo command to create first admin" && 
+      echo "API ready - local_trusted mode (no auth required)" && 
       cd ../../server && 
       HOST=0.0.0.0 PORT=10000 NODE_ENV=production pnpm exec tsx src/index.ts
     envVars:
@@ -21,13 +21,7 @@ services:
       - key: PORT
         value: 10000
       - key: PAPERCLIP_DEPLOYMENT_MODE
-        value: authenticated
-      - key: PAPERCLIP_DEPLOYMENT_EXPOSURE
-        value: public
-      - key: PAPERCLIP_PUBLIC_URL
-        value: https://paperclip-bruce.onrender.com
-      - key: BETTER_AUTH_SECRET
-        generateValue: true
+        value: local_trusted
       - key: PAPERCLIP_MIGRATION_PROMPT
         value: never
       - key: DATABASE_URL
