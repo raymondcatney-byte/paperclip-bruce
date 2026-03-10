@@ -3,34 +3,52 @@
 ## Your API is Running At:
 **https://paperclip-bruce.onrender.com**
 
-## Create First Admin (Required!)
+## Quick Start - Create First Admin
 
-Since Paperclip uses hashed API keys, you need to create the first admin via the bootstrap command:
+### Step 1: I've Created Config for You
+A config file has been placed at:
+`C:\Users\raymo\.paperclip\instances\default\config.json`
 
-### Step 1: Run Bootstrap CEO
-```bash
-# In your local CLI directory
-cd cli
+This tells the CLI to connect to your cloud instance.
 
-# Set the API URL to your cloud instance
-export PAPERCLIP_API_URL='https://paperclip-bruce.onrender.com'
+### Step 2: Run Bootstrap CEO
+Open Command Prompt and run:
 
-# Run bootstrap (this creates first admin and gives you an invite URL)
+```cmd
+cd C:\Users\raymo\paperclip-bruce\cli
+
 npx tsx src/index.ts auth bootstrap-ceo --base-url https://paperclip-bruce.onrender.com
 ```
 
-### Step 2: Visit the Invite URL
-The command will output something like:
+### Step 3: Visit the Invite URL
+The command will output a link like:
 ```
 https://paperclip-bruce.onrender.com/invite?token=abc123...
 ```
-Click that link to set up your admin account and get your API key.
 
-### Step 3: Configure CLI
-```bash
-export PAPERCLIP_API_URL='https://paperclip-bruce.onrender.com'
-export PAPERCLIP_API_KEY='your-api-key-from-invite'
+**Open that URL in your browser** to create your admin account and get your API key.
+
+### Step 4: Set Environment Variables
+After getting your API key from the invite page:
+
+```cmd
+set PAPERCLIP_API_URL=https://paperclip-bruce.onrender.com
+set PAPERCLIP_API_KEY=your-api-key-from-invite
 ```
+
+### Step 5: Use CLI
+```cmd
+# List companies
+npx tsx src/index.ts company list
+
+# Create an agent
+npx tsx src/index.ts agent create --name "My Agent"
+
+# Create an issue
+npx tsx src/index.ts issue create --title "Test issue" --company-id YOUR_COMPANY_ID
+```
+
+---
 
 ## API Endpoints:
 - **Health:** https://paperclip-bruce.onrender.com/api/health
@@ -38,6 +56,6 @@ export PAPERCLIP_API_KEY='your-api-key-from-invite'
 - **Agents:** https://paperclip-bruce.onrender.com/api/agents
 - **Issues:** https://paperclip-bruce.onrender.com/api/issues
 
-## Note on "Cannot GET /"
-The root URL shows "Cannot GET /" because this is API-only mode (no web UI).
-This is normal - the API endpoints work fine!
+## Note: "Cannot GET /" is Normal
+The root URL shows "Cannot GET /" because this is **API-only mode** (no web UI built).
+The API works perfectly - just use the `/api/*` endpoints!

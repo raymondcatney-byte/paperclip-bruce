@@ -1,0 +1,25 @@
+{
+  "$meta": {
+    "version": 1,
+    "updatedAt": "2026-03-09T00:00:00Z",
+    "source": "manual"
+  },
+  "database": {
+    "mode": "postgres",
+    "connectionString": "postgresql://placeholder:placeholder@localhost:5432/paperclip"
+  },
+  "server": {
+    "deploymentMode": "authenticated",
+    "exposure": "public",
+    "host": "0.0.0.0",
+    "port": 10000,
+    "serveUi": false
+  },
+  "logging": {
+    "mode": "file"
+  },
+  "auth": {
+    "baseUrlMode": "explicit",
+    "publicBaseUrl": "https://paperclip-bruce.onrender.com"
+  }
+}
